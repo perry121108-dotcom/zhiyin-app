@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zhiyin App / 知音求職助理
 
-## Getting Started
+Zhiyin App is a mobile-style AI career companion built with Next.js. It helps job seekers upload resume material, talk through career goals, receive warm guided coaching, and surface relevant job openings from 104 Job Bank or fallback mock data when the upstream service is unavailable.
 
-First, run the development server:
+知音求職助理是一個以 Next.js 建置的手機介面 AI 求職陪跑工具。它讓使用者上傳履歷與求職紀錄，透過 AI 對話釐清方向、整理履歷亮點、準備面試，並在合適時機搜尋 104 人力銀行職缺；若 104 服務阻擋或不可用，系統會回傳模擬職缺資料，維持 MVP 流程可用。
+
+## Documentation / 說明文件
+
+- [中文操作說明](docs/USER_GUIDE.zh-TW.md)
+- [English User Guide](docs/USER_GUIDE.en.md)
+
+## Core Features / 核心功能
+
+- AI-guided career chat powered by Google Gemini streaming responses.
+- Resume upload support for `.pdf` and `.txt` files.
+- Application record upload support for `.txt`, `.png`, `.jpg`, `.jpeg`, and `.webp`.
+- Staged coaching flow: self-understanding, job-fit clarification, recommendation, and follow-up guidance.
+- 104 Job Bank search API route with up to 5 job cards returned per search.
+- Mock job fallback when 104 blocks server-side requests or returns non-JSON responses.
+- Weekly free usage gate: 2 sessions per week in production, bypassed on `localhost`.
+- Per-session job search limit: 2 searches.
+
+## Tech Stack / 技術架構
+
+- Framework: Next.js 16 App Router
+- Language: TypeScript
+- UI: React 19 + CSS
+- AI: Google Gemini REST API with SSE streaming
+- PDF parsing: `pdf-parse`
+- Deployment target: Vercel
+
+## Quick Start / 快速啟動
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env.local`:
+
+```bash
+GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_MODEL=gemini-2.0-flash
+```
+
+3. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts / 可用指令
 
-## Learn More
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Important Notes / 注意事項
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Do not commit `.env.local` or real API keys.
+- `.env*` files are ignored by `.gitignore`.
+- Production usage count is stored in browser `localStorage`.
+- The job search integration is MVP-grade and may fall back to mock data.
+- User-uploaded file text is sent to the server route and then included in the Gemini system context for the active conversation.
